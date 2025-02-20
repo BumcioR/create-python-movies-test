@@ -15,27 +15,21 @@ function App() {
   const [addingActorToMovie, setAddingActorToMovie] = useState(false);
 
   useEffect(() => {
-    // Pobieranie filmów z serwera
-    const fetchMovies = async () => {
-      const response = await fetch(`/movies/`);
-      if (response.ok) {
-        const movies = await response.json();
-        setMovies(movies);
-      }
-    };
+    // Pobieranie filmów i aktorów
+    const fetchData = async () => {
+      const movieResponse = await fetch(`/movies/`);
+      const actorResponse = await fetch(`/actors/`);
 
-    // Pobieranie aktorów z serwera
-    const fetchActors = async () => {
-      const response = await fetch(`/actors/`);
-      if (response.ok) {
-        const actors = await response.json();
+      if (movieResponse.ok && actorResponse.ok) {
+        const movies = await movieResponse.json();
+        const actors = await actorResponse.json();
+        setMovies(movies);
         setActors(actors);
       }
     };
 
-    fetchMovies();
-    fetchActors(); // Pobranie aktorów podczas inicjalizacji
-  }, [addingActorToMovie]);
+    fetchData();
+  }, []);
 
   // Obsługa dodawania filmu
   async function handleAddMovie(movie) {
